@@ -13,7 +13,10 @@ import com.wmbest.widgets.R;
 public class FramedImageView extends ImageView {
 
     private Shape mShape = Shape.CIRCLE;
+    private Bitmap mSrc;
     private Drawable mFrame;
+
+    private Paint mPaint = new Paint();
 
     public FramedImageView(Context aContext, AttributeSet aAttrs) {
         super(aContext, aAttrs, 0);
@@ -34,10 +37,20 @@ public class FramedImageView extends ImageView {
         mFrame = a.getDrawable(R.styleable.FramedImageView_frame);
 
         a.recycle();
+
+        BitmapShader shader = new BitmapShader(drawableToBitmap(getDrawable()), 
+                Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        mPaint.setAntiAlias(true);
+        mPaint.setShader(shader);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+
+        if (mFrame != null) {
+            mFrame.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        }
+
         switch (mShape) {
             case CIRCLE:
                 drawCircle(canvas);
@@ -47,23 +60,13 @@ public class FramedImageView extends ImageView {
         }
 
         if (mFrame != null) {
-            mFrame.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
             mFrame.draw(canvas);
         }
     }
 
     private void drawCircle(Canvas aCanvas) {
-        Bitmap src = drawableToBitmap(getDrawable());
-
-        BitmapShader shader = new BitmapShader(src, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-         
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setShader(shader);
-
         int center = aCanvas.getWidth() / 2;
-
-        aCanvas.drawCircle(center, center, center, paint);
+        aCanvas.drawCircle(center, center, center, mPaint);
     }
 
     public static Bitmap drawableToBitmap (Drawable aDrawable) {
