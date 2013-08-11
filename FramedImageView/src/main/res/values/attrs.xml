@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FramedImageView">
+        <attr name="frame" format="reference" />
+        <attr name="imagePadding" format="dimension" />
+        <attr name="shape" format="enum">
+           <enum name="none" value="0"/>
+           <enum name="square" value="1"/>
+           <enum name="circle" value="2"/>
+        </attr>
+    </declare-styleable>
+</resources>
