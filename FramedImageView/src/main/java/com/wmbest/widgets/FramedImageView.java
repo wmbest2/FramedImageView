@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.*;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -13,7 +14,6 @@ import com.wmbest.widgets.R;
 public class FramedImageView extends ImageView {
 
     private Shape mShape = Shape.CIRCLE;
-    private Bitmap mSrc;
     private Drawable mFrame;
 
     private Paint mPaint = new Paint();
@@ -28,6 +28,24 @@ public class FramedImageView extends ImageView {
         setup(aContext, aAttrs);
     }
 
+    @Override
+    public void setImageURI(Uri aUri) {
+        super.setImageURI(aUri);
+        initPaint();
+    }
+
+    @Override
+    public void setImageResource(int aRes) {
+        super.setImageResource(aRes);
+        initPaint();
+    }
+
+    @Override
+    public void setImageDrawable(Drawable aDrawable) {
+        super.setImageDrawable(aDrawable);
+        initPaint();
+    }
+
     private void setup(Context aContext, AttributeSet aAttrs) {
         TypedArray a = aContext.obtainStyledAttributes(aAttrs,
                 R.styleable.FramedImageView);
@@ -37,10 +55,13 @@ public class FramedImageView extends ImageView {
         mFrame = a.getDrawable(R.styleable.FramedImageView_frame);
 
         a.recycle();
+        mPaint.setAntiAlias(true);
+        initPaint();
+    }
 
+    private void initPaint() {
         BitmapShader shader = new BitmapShader(drawableToBitmap(getDrawable()), 
                 Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        mPaint.setAntiAlias(true);
         mPaint.setShader(shader);
     }
 
