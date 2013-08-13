@@ -7,6 +7,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.drawable.*;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 import com.wmbest.widgets.R;
@@ -55,21 +56,34 @@ public class FramedImageView extends ImageView {
         mFrame = a.getDrawable(R.styleable.FramedImageView_frame);
 
         a.recycle();
-        mPaint.setAntiAlias(true);
-        initPaint();
     }
 
     private void initPaint() {
-        BitmapShader shader = new BitmapShader(drawableToBitmap(getDrawable()), 
+        if (getDrawable() == null) return;
+        if (getWidth() == 0 || getHeight() == 0) return;
+        Bitmap b = drawableToBitmap(getDrawable());
+        BitmapShader shader = new BitmapShader(b, 
                 Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+
+        Matrix m = new Matrix();
+        float scaleX = getWidth() / ((float) b.getWidth());
+        float scaleY = getHeight() / ((float) b.getHeight());
+
+        m.setScale(scaleX, scaleY);
+
+        shader.setLocalMatrix(m);
+
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
         mPaint.setShader(shader);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (mPaint.getShader() == null) initPaint();
 
         if (mFrame != null) {
-            mFrame.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            mFrame.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
         }
 
         switch (mShape) {
@@ -86,7 +100,7 @@ public class FramedImageView extends ImageView {
     }
 
     private void drawCircle(Canvas aCanvas) {
-        int center = aCanvas.getWidth() / 2;
+        int center = getWidth() / 2;
         aCanvas.drawCircle(center, center, center, mPaint);
     }
 
