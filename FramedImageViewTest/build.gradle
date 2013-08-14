@@ -1,0 +1,15 @@
+apply plugin: 'android'
+
+dependencies {
+    compile project(':FramedImageView')
+}
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "18.0.0"
+
+    defaultConfig {
+        minSdkVersion 1
+        targetSdkVersion 18
+    }
+}

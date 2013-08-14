@@ -1,1 +1,2 @@
 include ':FramedImageView'
+include ':FramedImageViewTest'

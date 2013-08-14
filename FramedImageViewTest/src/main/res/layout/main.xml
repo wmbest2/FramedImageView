@@ -1,0 +1,27 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:framed="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <com.wmbest.widgets.FramedImageView
+        android:id="@+id/framed_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:src="@drawable/avatar"
+        framed:frame="@drawable/normal_frame"
+        />
+    <com.wmbest.widgets.FramedImageView
+        android:id="@+id/framed_circle"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_marginTop="20dip"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/framed_normal"
+        android:src="@drawable/avatar"
+        framed:frame="@drawable/circle_frame"
+        framed:shape="circle"
+        />
+</RelativeLayout>
