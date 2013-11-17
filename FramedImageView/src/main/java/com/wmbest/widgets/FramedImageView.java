@@ -15,9 +15,11 @@ import com.wmbest.widgets.R;
 public class FramedImageView extends ImageView {
 
     private Shape mShape = Shape.CIRCLE;
-    private Drawable mFrame;
-
     private Paint mPaint = new Paint();
+    private Drawable mFrame;
+    private float    mRadius;
+    private RectF    mBounds;
+
 
     public FramedImageView(Context aContext, AttributeSet aAttrs) {
         super(aContext, aAttrs, 0);
@@ -48,12 +50,18 @@ public class FramedImageView extends ImageView {
     }
 
     private void setup(Context aContext, AttributeSet aAttrs) {
-        TypedArray a = aContext.obtainStyledAttributes(aAttrs,
-                R.styleable.FramedImageView);
+        TypedArray a = aContext.obtainStyledAttributes(aAttrs, R.styleable.FramedImageView);
 
         int shape = a.getInt(R.styleable.FramedImageView_shape, 0);
         mShape = Shape.values()[shape];
         mFrame = a.getDrawable(R.styleable.FramedImageView_frame);
+
+        if (mShape == Shape.ROUNDED) {
+            mRadius = a.getDimension(R.styleable.FramedImageView_radius, 0);
+            if (mRadius == 0) {
+               mShape = Shape.NONE;
+            }
+        }
 
         a.recycle();
     }
@@ -62,7 +70,7 @@ public class FramedImageView extends ImageView {
         if (getDrawable() == null) return;
         if (getWidth() == 0 || getHeight() == 0) return;
         Bitmap b = drawableToBitmap(getDrawable());
-        BitmapShader shader = new BitmapShader(b, 
+        BitmapShader shader = new BitmapShader(b,
                 Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 
         Matrix m = new Matrix();
@@ -76,6 +84,8 @@ public class FramedImageView extends ImageView {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setShader(shader);
+
+        mBounds = new RectF(0, 0, b.getWidth(), b.getHeight());
     }
 
     @Override
@@ -87,6 +97,9 @@ public class FramedImageView extends ImageView {
         }
 
         switch (mShape) {
+            case ROUNDED:
+                drawRounded(canvas);
+                break;
             case CIRCLE:
                 drawCircle(canvas);
                 break;
@@ -97,6 +110,10 @@ public class FramedImageView extends ImageView {
         if (mFrame != null) {
             mFrame.draw(canvas);
         }
+    }
+
+    private void drawRounded(Canvas aCanvas) {
+        aCanvas.drawRoundRect(mBounds, mRadius, mRadius, mPaint);
     }
 
     private void drawCircle(Canvas aCanvas) {
@@ -123,7 +140,7 @@ public class FramedImageView extends ImageView {
     }
 
     public static enum Shape {
-        NONE, SQUARE, CIRCLE;
+        NONE, SQUARE, CIRCLE, ROUNDED
     }
 }
 

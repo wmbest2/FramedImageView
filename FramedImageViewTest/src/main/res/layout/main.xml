@@ -24,4 +24,15 @@
         framed:frame="@drawable/circle_frame"
         framed:shape="circle"
         />
+    <com.wmbest.widgets.FramedImageView
+        android:id="@+id/framed_rounded"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_marginTop="20dip"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/framed_circle"
+        android:src="@drawable/avatar"
+        framed:shape="rounded"
+        framed:radius="32dp"
+        />
 </RelativeLayout>

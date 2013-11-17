@@ -7,6 +7,8 @@
            <enum name="none" value="0"/>
            <enum name="square" value="1"/>
            <enum name="circle" value="2"/>
+           <enum name="rounded" value="3"/>
         </attr>
+        <attr name="radius" format="dimension" />
     </declare-styleable>
 </resources>
