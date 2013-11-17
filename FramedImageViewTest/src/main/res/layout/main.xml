@@ -1,38 +1,50 @@
-<RelativeLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:framed="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:columnCount="2"
+    android:padding="16dp"
     >
     <com.wmbest.widgets.FramedImageView
         android:id="@+id/framed_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dip"
+        android:layout_margin="16dip"
         android:src="@drawable/avatar"
         framed:frame="@drawable/normal_frame"
         />
+
     <com.wmbest.widgets.FramedImageView
         android:id="@+id/framed_circle"
         android:layout_width="100dip"
         android:layout_height="100dip"
-        android:layout_marginTop="20dip"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/framed_normal"
+        android:layout_margin="16dip"
         android:src="@drawable/avatar"
         framed:frame="@drawable/circle_frame"
-        framed:shape="circle"
+        framed:type="circle"
         />
+
     <com.wmbest.widgets.FramedImageView
         android:id="@+id/framed_rounded"
         android:layout_width="100dip"
         android:layout_height="100dip"
-        android:layout_marginTop="20dip"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/framed_circle"
+        android:layout_margin="16dip"
         android:src="@drawable/avatar"
-        framed:shape="rounded"
-        framed:radius="32dp"
+        framed:type="rounded"
+        framed:radius="16dp"
         />
-</RelativeLayout>
+
+    <com.wmbest.widgets.FramedImageView
+        android:id="@+id/framed_rounded2"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_margin="16dip"
+        android:src="@drawable/avatar"
+        framed:type="rounded"
+        framed:radiusTopLeft="24dp"
+        framed:radiusTopRight="24dp"
+        />
+
+
+</GridLayout>

@@ -3,12 +3,16 @@
     <declare-styleable name="FramedImageView">
         <attr name="frame" format="reference" />
         <attr name="imagePadding" format="dimension" />
-        <attr name="shape" format="enum">
+        <attr name="type" format="enum">
            <enum name="none" value="0"/>
            <enum name="square" value="1"/>
            <enum name="circle" value="2"/>
            <enum name="rounded" value="3"/>
         </attr>
         <attr name="radius" format="dimension" />
+        <attr name="radiusTopLeft" format="dimension" />
+        <attr name="radiusTopRight" format="dimension" />
+        <attr name="radiusBottomLeft" format="dimension" />
+        <attr name="radiusBottomRight" format="dimension" />
     </declare-styleable>
 </resources>

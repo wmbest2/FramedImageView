@@ -5,20 +5,21 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.*;
+import android.graphics.drawable.shapes.RoundRectShape;
+import android.graphics.drawable.shapes.Shape;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.widget.ImageView;
-
-import com.wmbest.widgets.R;
 
 public class FramedImageView extends ImageView {
 
-    private Shape mShape = Shape.CIRCLE;
+    private Type  mType  = Type.CIRCLE;
     private Paint mPaint = new Paint();
+    private RectF mBounds;
+
     private Drawable mFrame;
     private float    mRadius;
-    private RectF    mBounds;
+    private Shape    mShape;
 
 
     public FramedImageView(Context aContext, AttributeSet aAttrs) {
@@ -52,18 +53,43 @@ public class FramedImageView extends ImageView {
     private void setup(Context aContext, AttributeSet aAttrs) {
         TypedArray a = aContext.obtainStyledAttributes(aAttrs, R.styleable.FramedImageView);
 
-        int shape = a.getInt(R.styleable.FramedImageView_shape, 0);
-        mShape = Shape.values()[shape];
+        int type = a.getInt(R.styleable.FramedImageView_type, 0);
+        mType = Type.values()[type];
         mFrame = a.getDrawable(R.styleable.FramedImageView_frame);
 
-        if (mShape == Shape.ROUNDED) {
-            mRadius = a.getDimension(R.styleable.FramedImageView_radius, 0);
-            if (mRadius == 0) {
-               mShape = Shape.NONE;
-            }
+        switch (mType) {
+            case ROUNDED:
+                initRounded(a);
+                break;
+            case SHAPE:
+                mType = Type.NONE;
+//                mShape = a.getDrawable(R.styleable.FramedImageView_shape);
+                break;
         }
 
         a.recycle();
+    }
+
+    private void initRounded(TypedArray aAttr) {
+        mRadius = aAttr.getDimension(R.styleable.FramedImageView_radius, 0);
+        if (mRadius == 0) {
+            float tl, tr, bl, br;
+            tl = aAttr.getDimension(R.styleable.FramedImageView_radiusTopLeft, 0);
+            tr = aAttr.getDimension(R.styleable.FramedImageView_radiusTopRight, 0);
+            bl = aAttr.getDimension(R.styleable.FramedImageView_radiusBottomLeft, 0);
+            br = aAttr.getDimension(R.styleable.FramedImageView_radiusBottomRight, 0);
+            if (tl + tr + bl + br > 0) {
+                float[] outerRadii = new float[8];
+                outerRadii[0] = outerRadii[1] = tl;
+                outerRadii[2] = outerRadii[3] = tr;
+                outerRadii[4] = outerRadii[5] = br;
+                outerRadii[6] = outerRadii[7] = bl;
+                mShape = new RoundRectShape(outerRadii, null, null);
+                mType = Type.SHAPE;
+            } else {
+                mType = Type.NONE;
+            }
+        }
     }
 
     private void initPaint() {
@@ -96,7 +122,10 @@ public class FramedImageView extends ImageView {
             mFrame.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
         }
 
-        switch (mShape) {
+        switch (mType) {
+            case SHAPE:
+                drawShape(canvas);
+                break;
             case ROUNDED:
                 drawRounded(canvas);
                 break;
@@ -110,6 +139,11 @@ public class FramedImageView extends ImageView {
         if (mFrame != null) {
             mFrame.draw(canvas);
         }
+    }
+
+    private void drawShape(Canvas aCanvas) {
+        mShape.resize(mBounds.width(), mBounds.height());
+        mShape.draw(aCanvas, mPaint);
     }
 
     private void drawRounded(Canvas aCanvas) {
@@ -139,8 +173,8 @@ public class FramedImageView extends ImageView {
         return bitmap;
     }
 
-    public static enum Shape {
-        NONE, SQUARE, CIRCLE, ROUNDED
+    public static enum Type {
+        NONE, SQUARE, CIRCLE, ROUNDED, SHAPE
     }
 }
 

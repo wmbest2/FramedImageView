@@ -9,7 +9,12 @@ android {
     buildToolsVersion "19.0.0"
 
     defaultConfig {
-        minSdkVersion 1
+        minSdkVersion 14
         targetSdkVersion 19
     }
 }
+
+dependencies {
+    compile 'com.android.support:gridlayout-v7:19.0.0'
+}
+
